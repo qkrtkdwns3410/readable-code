@@ -22,7 +22,7 @@ public class MinesweeperGame {
         while (true) {
             showBoard();
             
-            if (gameStatus == 1) {
+            if (doesUserWinTheGame()) {
                 System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
                 break;
             }
@@ -32,22 +32,12 @@ public class MinesweeperGame {
                 break;
             }
             
-            System.out.println();
-            System.out.println("선택할 좌표를 입력하세요. (예: a1)");
-            
-            //input -> cellInput 으로 변수명 명확화
-            String cellInput = scanner.nextLine();
-            System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
-            
-            //input2 -> actionInput 으로 변수명 명확화
-            String actionInput = scanner.nextLine();
+            String cellInput = getCellInputFromUser(scanner);
+            String actionInput = getUserActionInputFromUser(scanner);
             
             // c -> cellInputCol, r -> cellInputRow 변수명 명확화
-            char cellInputCol = cellInput.charAt(0);
-            char cellInputRow = cellInput.charAt(1);
-            
-            int selectedColIndex = convertColFrom(cellInputCol);
-            int selectedRowIndex = convertRowFrom(cellInputRow);
+            int selectedColIndex = getSelectedColIndex(cellInput);
+            int selectedRowIndex = getSelectedRowIndex(cellInput);
             
             if (actionInput.equals("2")) {
                 board[selectedRowIndex][selectedColIndex] = "⚑";
@@ -68,6 +58,35 @@ public class MinesweeperGame {
                 System.out.println("잘못된 번호를 선택하셨습니다.");
             }
         }
+    }
+    
+    private static int getSelectedRowIndex(String cellInput) {
+        char cellInputRow = cellInput.charAt(1);
+        return convertRowFrom(cellInputRow);
+    }
+    
+    private static int getSelectedColIndex(String cellInput) {
+        char cellInputCol = cellInput.charAt(0);
+        return convertColFrom(cellInputCol);
+    }
+    
+    private static String getUserActionInputFromUser(Scanner scanner) {
+        System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
+        
+        //input2 -> actionInput 으로 변수명 명확화
+        return scanner.nextLine();
+    }
+    
+    private static String getCellInputFromUser(Scanner scanner) {
+        System.out.println();
+        System.out.println("선택할 좌표를 입력하세요. (예: a1)");
+        
+        //input -> cellInput 으로 변수명 명확화
+        return scanner.nextLine();
+    }
+    
+    private static boolean doesUserWinTheGame() {
+        return gameStatus == 1;
     }
     
     private static void checkIfGameIsOver() {
