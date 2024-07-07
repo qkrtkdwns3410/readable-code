@@ -25,22 +25,28 @@ public class MinesweeperGame {
         initializeGame();
         
         while (true) {
-            showBoard();
-            
-            if (doesUserWinTheGame()) {
-                System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
-                break;
+            try {
+                showBoard();
+                
+                if (doesUserWinTheGame()) {
+                    System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
+                    break;
+                }
+                
+                if (gameStatus == -1) {
+                    System.out.println("지뢰를 밟았습니다. GAME OVER!");
+                    break;
+                }
+                
+                String cellInput = getCellInputFromUser();
+                String userActionInput = getUserActionInputFromUser();
+                
+                actOnCell(cellInput, userActionInput);
+            } catch (AppException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("예상치 못한 오류가 발생했습니다.");
             }
-            
-            if (gameStatus == -1) {
-                System.out.println("지뢰를 밟았습니다. GAME OVER!");
-                break;
-            }
-            
-            String cellInput = getCellInputFromUser();
-            String userActionInput = getUserActionInputFromUser();
-            
-            actOnCell(cellInput, userActionInput);
         }
     }
     
@@ -66,7 +72,7 @@ public class MinesweeperGame {
             return;
         }
         
-        System.out.println("잘못된 번호를 선택하셨습니다.");
+        throw new AppException("잘못된 입력입니다. 다시 입력해주세요.");
     }
     
     private static void changeGameStatusToLose() {
@@ -129,11 +135,16 @@ public class MinesweeperGame {
     private static boolean isAllCellOpened() {
         return Arrays.stream(BOARD) // Stream<String[]> (2차원 배열을 Stream으로 변환)
                 .flatMap(Arrays::stream) // Stream<String> (2차원 배열을 1차원 배열로 변환)
-                .noneMatch(cell -> cell.equals(CLOSED_CELL_SIGN)); // 모든 셀이 CLOSED_CELL_SIGN인지 확인
+                .noneMatch(CLOSED_CELL_SIGN::equals); // 모든 셀이 CLOSED_CELL_SIGN인지 확인
     }
     
     private static int convertRowFrom(char cellInputRow) {
-        return Character.getNumericValue(cellInputRow) - 1;
+        int rowIndex = Character.getNumericValue(cellInputRow) - 1;
+        if (rowIndex >= BOARD_ROW_SIZE) {
+            throw new AppException("잘못된 행을 선택하셨습니다.");
+        }
+        
+        return rowIndex;
     }
     
     private static int convertColFrom(char cellInputCol) {
@@ -148,7 +159,7 @@ public class MinesweeperGame {
             case 'h' -> 7;
             case 'i' -> 8;
             case 'j' -> 9;
-            default -> -1;
+            default -> throw new AppException("Unexpected value: " + cellInputCol);
         };
     }
     
