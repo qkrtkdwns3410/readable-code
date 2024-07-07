@@ -21,12 +21,7 @@ public class MinesweeperGame {
     private static int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
 
     public static void main(String[] args) {
-        // 안내 문구 메서드 분리
         showGameStartComment();
-        
-        Scanner scanner = new Scanner(System.in);
-        
-        // 게임 초기화 메서드 분리
         initializeGame();
         
         while (true) {
@@ -243,9 +238,9 @@ public class MinesweeperGame {
         if (NEARBY_LAND_MINE_COUNTS[row][col] != 0) {
             BOARD[row][col] = String.valueOf(NEARBY_LAND_MINE_COUNTS[row][col]);
             return;
-        } else {
-            BOARD[row][col] = OPENED_CELL_SIGN;
         }
+        
+        BOARD[row][col] = OPENED_CELL_SIGN;
         
         open(row - 1, col - 1);
         open(row - 1, col);
