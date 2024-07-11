@@ -1,6 +1,10 @@
 package cleancode.minesweeper.tobe.io;
 
-import cleancode.minesweeper.tobe.Cell;
+import cleancode.minesweeper.tobe.AppException;
+import cleancode.minesweeper.tobe.GameBoard;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * packageName    : cleancode.minesweeper.tobe.io
@@ -15,24 +19,38 @@ import cleancode.minesweeper.tobe.Cell;
  */
 public class ConsoleOutputHandler {
     
+    public static final char BASE_CHAR_FOR_COL = 'a';
+    
     public void showGameStartComment() {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println("지뢰찾기 게임 시작!");
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
     
-    public void showBoard(Cell[][] board) {
-        System.out.println("   a b c d e f g h i j");
-        for (int i = 0; i < board.length; i++) {
-            System.out.printf("%d  ", i + 1);
+    public void showBoard(GameBoard board) {
+        String joiningAlphabets = generateColAlphabets(board);
+        
+        System.out.println("    " + joiningAlphabets);
+        
+        for (int row = 0; row < board.getRowSize(); row++) {
+            System.out.printf("%2d  ", row + 1);
             
-            for (int j = 0; j < board[0].length; j++) {
-                System.out.print(board[i][j].getSign() + " ");
+            for (int col = 0; col < board.getColSize(); col++) {
+                System.out.print(board.getSign(row, col) + " ");
             }
             
             System.out.println();
         }
         System.out.println();
+    }
+    
+    private static String generateColAlphabets(GameBoard board) {
+        List<String> alphabets = IntStream.range(0, board.getColSize())
+                .mapToObj(index -> (char) (index + BASE_CHAR_FOR_COL))
+                .map(String::valueOf)
+                .toList();
+        
+        return String.join(" ", alphabets);
     }
     
     public void gameLosingComment() {
@@ -41,5 +59,24 @@ public class ConsoleOutputHandler {
     
     public void gameWinningComment() {
         System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
+    }
+    
+    public void printCommentForSelectingCell() {
+        System.out.println();
+        System.out.println("선택할 좌표를 입력하세요. (예: a1)");
+    }
+    
+    public void printCommentForUserAction() {
+        System.out.println();
+        System.out.println("1. 열기 2. 깃발 꽂기/뺴기");
+        System.out.println("원하는 동작을 선택하세요. (예: 1)");
+    }
+    
+    public void printExceptionMessage(AppException e) {
+        System.out.println(e.getMessage());
+    }
+    
+    public void printSimpleMessage() {
+        System.out.println("예상치 못한 오류가 발생했습니다.");
     }
 }
