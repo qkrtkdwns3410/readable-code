@@ -1,5 +1,6 @@
 package cleancode.minesweeper.tobe;
 
+import cleancode.minesweeper.tobe.gameLevel.GameLevel;
 import cleancode.minesweeper.tobe.io.ConsoleInputHandler;
 import cleancode.minesweeper.tobe.io.ConsoleOutputHandler;
 
@@ -15,14 +16,16 @@ import cleancode.minesweeper.tobe.io.ConsoleOutputHandler;
  * 24. 7. 9.        ipeac       최초 생성
  */
 public class Minesweeper {
-    public static final int BOARD_ROW_SIZE = 14;
-    public static final int BOARD_COL_SIZE = 14;
-    
-    private final GameBoard gameBoard = new GameBoard(BOARD_ROW_SIZE, BOARD_COL_SIZE);
+    private final GameBoard gameBoard;
     private final BoardIndexConverter boardIndexConverter = new BoardIndexConverter();
     private final ConsoleInputHandler consoleInputHandler = new ConsoleInputHandler();
     private final ConsoleOutputHandler consoleOutputHandler = new ConsoleOutputHandler();
+    
     private static int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
+    
+    public Minesweeper(GameLevel gameLevel) {
+        gameBoard = new GameBoard(gameLevel);
+    }
     
     public void run() {
         consoleOutputHandler.showGameStartComment();

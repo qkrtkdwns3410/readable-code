@@ -1,5 +1,8 @@
 package cleancode.minesweeper.tobe;
 
+import cleancode.minesweeper.tobe.cell.Cell2;
+import cleancode.minesweeper.tobe.gameLevel.GameLevel;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -17,25 +20,31 @@ import java.util.Random;
 public class GameBoard {
     public static final int LAND_MINE_COUNT = 10;
     
-    private final Cell[][] board;
+    private final Cell2[][ ] board;
+    private final int landMineCount;
     
-    public GameBoard(int rowSize, int colSize) {
-        board = new Cell[rowSize][colSize];
+    public GameBoard(GameLevel gameLevel) {
+        int rowSize = gameLevel.getRowSize();
+        int colSize = gameLevel.getColSize();
+        
+        board = new Cell2[rowSize][colSize];
+        
+        landMineCount = gameLevel.getLandMineCount();
     }
     
     public void initializeGame() {
-        int rowSize = board.length;
-        int colSize = board[0].length;
+        int rowSize = getRowSize();
+        int colSize = getColSize();
         for (int row = 0; row < rowSize; row++) {
             for (int col = 0; col < colSize; col++) {
-                board[row][col] = Cell.create();
+                board[row][col] = Cell2.create();
             }
         }
         
         for (int i = 0; i < LAND_MINE_COUNT; i++) {
             int landMineCol = new Random().nextInt(colSize);
             int rowMineCol = new Random().nextInt(rowSize);
-            Cell landMineCell = findCell(rowMineCol, landMineCol);
+            Cell2 landMineCell = findCell(rowMineCol, landMineCol);
             landMineCell.turnOnLandMine();
         }
         
@@ -52,7 +61,7 @@ public class GameBoard {
     }
     
     public boolean isLandMineCell(int selectedRowIndex, int selectedColIndex) {
-        Cell foundCell = findCell(selectedRowIndex, selectedColIndex);
+        Cell2 foundCell = findCell(selectedRowIndex, selectedColIndex);
         return foundCell.isLandMine();
     }
     
@@ -65,21 +74,21 @@ public class GameBoard {
     }
     
     public String getSign(int rowIndex, int colIndex) {
-        Cell cell = findCell(rowIndex, colIndex);
+        Cell2 cell = findCell(rowIndex, colIndex);
         return cell.getSign();
     }
     
     public void flag(int rowIndex, int colIndex) {
-        Cell foundCell = findCell(rowIndex, colIndex);
+        Cell2 foundCell = findCell(rowIndex, colIndex);
         foundCell.flag();
     }
     
     public void open(int rowIndex, int colIndex) {
-        Cell foundCell = findCell(rowIndex, colIndex);
+        Cell2 foundCell = findCell(rowIndex, colIndex);
         foundCell.open();
     }
     
-    private Cell findCell(int row, int col) {
+    private Cell2 findCell(int row, int col) {
         return board[row][col];
     }
     
@@ -126,7 +135,7 @@ public class GameBoard {
     public boolean isAllCellChecked() {
         return Arrays.stream(board) // Stream<String[]> (2차원 배열을 Stream으로 변환)
                 .flatMap(Arrays::stream) // Stream<String> (2차원 배열을 1차원 배열로 변환)
-                .allMatch(Cell::isChecked); // 모든 셀이 CLOSED_CELL_SIGN인지 확인
+                .allMatch(Cell2::isChecked); // 모든 셀이 CLOSED_CELL_SIGN인지 확인
     }
     
     public void openSurrounedCells(int rowIndex, int colIndex) {
