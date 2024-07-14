@@ -22,7 +22,7 @@ public class EmptyCell extends Cell {
     
     @Override
     public boolean hasLandMineCount() {
-        return true;
+        return false;
     }
     
     @Override
