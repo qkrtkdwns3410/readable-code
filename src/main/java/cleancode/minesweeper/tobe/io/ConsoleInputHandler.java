@@ -13,7 +13,7 @@ import java.util.Scanner;
  * -----------------------------------------------------------
  * 24. 7. 9.        ipeac       최초 생성
  */
-public class ConsoleInputHandler {
+public class ConsoleInputHandler implements InputHandler {
     public static final Scanner SCANNER = new Scanner(System.in);
     
     public String getUserInput() {

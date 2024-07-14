@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
  * -----------------------------------------------------------
  * 24. 7. 9.        ipeac       최초 생성
  */
-public class ConsoleOutputHandler {
+public class ConsoleOutputHandler implements OutputHandler {
     
     public static final char BASE_CHAR_FOR_COL = 'a';
     
@@ -61,22 +61,22 @@ public class ConsoleOutputHandler {
         System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
     }
     
-    public void printCommentForSelectingCell() {
+    public void showCommentForSelectingCell() {
         System.out.println();
         System.out.println("선택할 좌표를 입력하세요. (예: a1)");
     }
     
-    public void printCommentForUserAction() {
+    public void showCommentForUserAction() {
         System.out.println();
         System.out.println("1. 열기 2. 깃발 꽂기/뺴기");
         System.out.println("원하는 동작을 선택하세요. (예: 1)");
     }
     
-    public void printExceptionMessage(AppException e) {
+    public void showExceptionMessage(AppException e) {
         System.out.println(e.getMessage());
     }
     
-    public void printSimpleMessage() {
+    public void showSimpleMessage() {
         System.out.println("예상치 못한 오류가 발생했습니다.");
     }
 }
