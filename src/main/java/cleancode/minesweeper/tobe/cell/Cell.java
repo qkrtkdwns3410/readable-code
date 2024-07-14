@@ -11,19 +11,12 @@ package cleancode.minesweeper.tobe.cell;
  * -----------------------------------------------------------
  * 24. 7. 8.        ipeac       최초 생성
  */
-public abstract class Cell2 {
+public abstract class Cell {
     protected static final String FLAG_SIGN = "⚑";
     protected static final String UNCHECKED_SIGN = "□";
-    private static final String EMPTY_SIGN = "■";
     
-    private int nearbyLandMineCount;
-    private boolean isLandMine;
     protected boolean isFlaged;
     protected boolean isOpened;
-    
-    public abstract void turnOnLandMine();
-    
-    public abstract void updateNearbyLandMineCount(int count);
     
     public boolean isChecked() {
         return isFlaged || isOpened;
